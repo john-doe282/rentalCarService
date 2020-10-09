@@ -1,6 +1,7 @@
 package com.andrew.rental.controller;
 
 import com.andrew.rental.model.Car;
+import com.andrew.rental.model.Status;
 import com.andrew.rental.service.CarService;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,5 +35,11 @@ public class CarController {
     @DeleteMapping("{id}")
     void deleteCar(@PathVariable("id") UUID id) throws NotFoundException {
         carService.deleteCarById(id);
+    }
+
+    @PatchMapping("{id}")
+    void setStatus(@PathVariable("id") UUID id,
+                   @RequestBody Status status) throws NotFoundException {
+        carService.setStatusById(id, status);
     }
 }

@@ -27,7 +27,6 @@ public final class Car {
     private Status status;
 
 
-    @JsonIgnore
     @Column(name = "owner_id")
     private UUID ownerId;
 

@@ -9,6 +9,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 @RestController
@@ -39,7 +40,7 @@ public class CarController {
 
     @PatchMapping("{id}")
     void setStatus(@PathVariable("id") UUID id,
-                   @RequestBody Status status) throws NotFoundException {
-        carService.setStatusById(id, status);
+                   @RequestBody Map<String, String> status) throws NotFoundException {
+        carService.setStatusById(id, Status.fromString(status.get("status")));
     }
 }

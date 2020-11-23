@@ -49,9 +49,20 @@ message DeleteCarRequest {
 message DeleteCarResponse {
 
 }
+
+message SetStatusRequest {
+  string id = 1;
+  Status status = 2;
+}
+
+message SetStatusResponse {
+
+}
+
 service CarService {
   rpc all(AllCarsRequest) returns (AllCarsResponse);
   rpc get(GetCarRequest) returns (GetCarResponse);
   rpc add(AddCarRequest) returns (AddCarResponse);
   rpc delete(DeleteCarRequest) returns (DeleteCarResponse);
+  rpc setStatus(SetStatusRequest) returns (SetStatusResponse);
 }

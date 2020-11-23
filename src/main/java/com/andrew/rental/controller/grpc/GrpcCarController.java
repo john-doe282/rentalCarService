@@ -2,9 +2,11 @@ package com.andrew.rental.controller.grpc;
 
 import com.andrew.rental.*;
 import com.andrew.rental.model.Car;
+import com.andrew.rental.model.Status;
 import com.andrew.rental.service.CarService;
 import io.grpc.stub.StreamObserver;
 import javassist.NotFoundException;
+import lombok.SneakyThrows;
 import org.lognet.springboot.grpc.GRpcService;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -31,8 +33,9 @@ public class GrpcCarController extends CarServiceGrpc.CarServiceImplBase {
         responseObserver.onCompleted();
     }
 
+    @SneakyThrows
     @Override
-    public void get(GetCarRequest request, StreamObserver<GetCarResponse> responseObserver) throws NotFoundException {
+    public void get(GetCarRequest request, StreamObserver<GetCarResponse> responseObserver) {
         Car car = carService.getCarById(UUID.fromString(request.getId()));
         responseObserver.onNext(car.toGetCarResponse());
         responseObserver.onCompleted();
@@ -45,10 +48,21 @@ public class GrpcCarController extends CarServiceGrpc.CarServiceImplBase {
         responseObserver.onCompleted();
     }
 
+    @SneakyThrows
     @Override
-    public void delete(DeleteCarRequest request, StreamObserver<DeleteCarResponse> responseObserver) throws NotFoundException {
+    public void delete(DeleteCarRequest request, StreamObserver<DeleteCarResponse> responseObserver) {
         carService.deleteCarById(UUID.fromString(request.getId()));
         responseObserver.onNext(DeleteCarResponse.newBuilder().build());
+        responseObserver.onCompleted();
+    }
+
+    @SneakyThrows
+    @Override
+    public void setStatus(SetStatusRequest request, StreamObserver<SetStatusResponse> responseObserver) {
+        UUID id = UUID.fromString(request.getId());
+        com.andrew.rental.model.Status status = com.andrew.rental.model.Status.valueOf(request.getStatus().toString());
+        carService.setStatusById(id, status);
+        responseObserver.onNext(SetStatusResponse.newBuilder().build());
         responseObserver.onCompleted();
     }
 }

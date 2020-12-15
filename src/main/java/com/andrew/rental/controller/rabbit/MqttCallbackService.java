@@ -45,8 +45,8 @@ public class MqttCallbackService implements MqttCallback {
             var typeRef = new TypeReference<HashMap<String, Object>>() {};
             HashMap<String, Object> hashMap = mapper.
                     readValue(mqttMessage.getPayload(), typeRef);
-            MqttMessageType message_type = (MqttMessageType) hashMap.
-                    get("message_type");
+            MqttMessageType message_type = MqttMessageType.valueOf(hashMap.
+                    get("message_type").toString());
             switch (message_type) {
                 case ADD:
                     handleAddRequest(hashMap.get("payload"));

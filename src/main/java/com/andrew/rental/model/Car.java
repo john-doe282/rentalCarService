@@ -3,6 +3,7 @@ package com.andrew.rental.model;
 import com.andrew.rental.AddCarRequest;
 import com.andrew.rental.GetCarResponse;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -31,6 +32,7 @@ public final class Car {
 
 
     @Column(name = "owner_id")
+    @JsonProperty("owner_id")
     private UUID ownerId;
 
     public GetCarResponse toGetCarResponse() {

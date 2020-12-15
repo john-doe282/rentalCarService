@@ -5,6 +5,7 @@ import com.andrew.rental.model.Car;
 import com.andrew.rental.service.CarService;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import javassist.NotFoundException;
 import lombok.var;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.UUID;
 
 @Service
 public class MqttCallbackService implements MqttCallback {
@@ -32,6 +34,10 @@ public class MqttCallbackService implements MqttCallback {
         carService.addCar(car);
     }
 
+    private void handleDeleteRequest(Object payload) throws NotFoundException {
+        String id = mapper.convertValue(payload, String.class);
+        carService.deleteCarById(UUID.fromString(id));
+    }
 
     @Override
     public void messageArrived(String s, MqttMessage mqttMessage) throws Exception {
@@ -45,9 +51,8 @@ public class MqttCallbackService implements MqttCallback {
                 case ADD:
                     handleAddRequest(hashMap.get("payload"));
                     break;
-                case GET_ONE:
-                case GET_ALL:
                 case DELETE:
+                    handleDeleteRequest(hashMap.get("payload"));
                     break;
                 default:
                     throw new IllegalArgumentException("Message type not supported");
